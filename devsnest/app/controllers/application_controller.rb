@@ -26,7 +26,6 @@ class ApplicationController < ActionController::API
   end
 
   def validate_bot_user
-    byebug
     @bot = request.headers["Token"] == ENV['DISCORD_TOKEN'] && request.headers["User-Type"] == 'Bot'
     return true
   end
