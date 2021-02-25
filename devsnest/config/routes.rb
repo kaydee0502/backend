@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  get '/health_check', to: 'health_check#index'
   namespace :api do
     namespace :v1 do
       devise_for :users,
