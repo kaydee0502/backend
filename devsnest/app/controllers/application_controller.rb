@@ -2,6 +2,7 @@
 
 class ApplicationController < ActionController::API
   include ApiRenderConcern
+  before_action :set_current_user
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :validate_bot_user
   def render_resource(resource)
@@ -26,24 +27,34 @@ class ApplicationController < ActionController::API
   end
 
   def validate_bot_user
-    @bot = request.headers["Token"] == ENV['DISCORD_TOKEN'] && request.headers["User-Type"] == 'Bot'
-    return true
+    @bot = request.headers['Token'] == ENV['DISCORD_TOKEN'] && request.headers['User-Type'] == 'Bot'
+    true
   end
 
   def user_auth
-    return true if current_user.present?
+    return true if @current_user.present?
+
     render_forbidden
   end
 
   def bot_auth
     return true if @bot.present?
+
     render_forbidden
   end
 
   def simple_auth
-    return true if @bot.present? || current_user.present?
+    return true if @bot.present? || @current_user.present?
+
     render_forbidden
   end
+
+  def set_current_user
+    if current_api_v1_user.present?
+      @current_user = current_api_v1_user
+    end
+  end
+
   protected
 
   def configure_permitted_parameters
