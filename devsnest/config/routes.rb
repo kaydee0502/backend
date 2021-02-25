@@ -4,9 +4,8 @@ Rails.application.routes.draw do
   get '/health_check', to: 'health_check#index'
   namespace :api do
     namespace :v1 do
-      devise_for :users,
+      devise_for :users, skip:[:registrations],
                  controllers: {
-                   registrations: 'api/v1/registrations',
                    omniauth_callbacks: 'api/v1/omniauth_callbacks'
                  }
       jsonapi_resources :users, only: %i[index show update create] do
