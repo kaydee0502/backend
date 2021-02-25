@@ -34,19 +34,19 @@ class ApplicationController < ActionController::API
   def user_auth
     return true if @current_user.present?
 
-    render_forbidden
+    render_unauthorized
   end
 
   def bot_auth
     return true if @bot.present?
 
-    render_forbidden
+    render_unauthorized
   end
 
   def simple_auth
     return true if @bot.present? || @current_user.present?
 
-    render_forbidden
+    render_unauthorized
   end
 
   def set_current_user
