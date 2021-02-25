@@ -37,7 +37,7 @@ module Api
         if user
           user.discord_active = true
           user.save
-          render_success(user.as_json.merge({ "type": 'users', status: "status updated" }))
+          return render_success(user.as_json.merge({ "type": 'users', status: "status updated" }))
         end
         super
       end
