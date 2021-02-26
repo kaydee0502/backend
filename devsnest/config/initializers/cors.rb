@@ -11,7 +11,7 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
     origins "#{ENV['FRONTEND_URL']}, https://devsnest-frontend.vercel.app/"
 
-    resource 'devsnest.in, devsnest-frontend.vercel.app',
+    resource '*',
              headers: :any,
              methods: %i[get post put patch delete options head]
   end
