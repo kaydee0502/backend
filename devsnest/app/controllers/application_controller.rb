@@ -56,11 +56,8 @@ class ApplicationController < ActionController::API
   end
 
   def after_sign_in_path_for(resource)
-    if @current_user
-      "#{ENV['FRONTEND_URL']}/dashboard"
-    else
-      "#{ENV['FRONTEND_URL']}"
-    end
+    set_current_user
+    @current_user.present? ? "#{ENV['FRONTEND_URL']}/dashboard" : "#{ENV['FRONTEND_URL']}"
   end
 
   protected

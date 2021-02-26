@@ -10,7 +10,7 @@ Rails.application.routes.draw do
                  }
       jsonapi_resources :users, only: %i[index show update create] do
         collection do
-          get :report, :leaderboard
+          get :report, :leaderboard, :me
           delete :log_out
           put :left_discord
         end
