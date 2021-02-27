@@ -7,13 +7,13 @@
 
 # Read more: https://github.com/cyu/rack-cors
 
-Rails.application.config.middleware.insert_before 0, Rack::Cors do
-  allow do
-    origins '*'
-    resource '*',
-             headers: :any,
-             methods: %i[get post put patch delete options head],
-             expose: %i[access-token expiry token-type uid client]
-  end
-end
+# Rails.application.config.middleware.insert_before 0, Rack::Cors do
+#   allow do
+#     origins '*'
+#     resource '*',
+#              headers: :any,
+#              methods: %i[get post put patch delete options head],
+#              expose: %i[access-token expiry token-type uid client]
+#   end
+# end
 
