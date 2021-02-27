@@ -97,7 +97,7 @@ Rails.application.configure do
   # class timestamps to determine how long to wait before reading from the
   # replica.
   #
-  Rails.application.config.session_store :cookie_store, key: '_interslice_session', domain: '.devsnest.in', tld_length: 2, httponly: false
+  # Rails.application.config.session_store :cookie_store, key: '_interslice_session', domain: '.devsnest.in', tld_length: 2, httponly: false
   # Devsnest::Application.config.session_store :cookie_store, :key => '_interslice_session', :domain => :all, :tld_length => 2
   # By default Rails will store a last write timestamp in the session. The
   # DatabaseSelector middleware is designed as such you can define your own
@@ -106,4 +106,6 @@ Rails.application.configure do
   # config.active_record.database_selector = { delay: 2.seconds }
   # config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
+  config.hosts << "devsnest.in"
+  config.hosts << "api.devsnest.in"
 end
