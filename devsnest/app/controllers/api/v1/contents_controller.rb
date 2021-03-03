@@ -6,5 +6,9 @@ module Api
       include JSONAPI::ActsAsResourceController
       before_action :simple_auth, only: %i[index show]
     end
+
+    def context
+      { user: @current_user }
+    end
   end
 end

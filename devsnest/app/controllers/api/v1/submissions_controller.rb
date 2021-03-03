@@ -7,9 +7,13 @@ module Api
       before_action :simple_auth, only: [:create]
 
       def create
-        discord_id = params['data']['attributes']['discord_id']
+        if @bot.present?
+          discord_id = params['data']['attributes']['discord_id']
+          user = User.find_by(discord_id: discord_id)
+        else
+          user = @current_user
+        end
         question_unique_id = params['data']['attributes']['question_unique_id']
-        user = User.find_by(discord_id: discord_id)
         content = Content.find_by(unique_id: question_unique_id)
         choice = params['data']['attributes']['status']
 
