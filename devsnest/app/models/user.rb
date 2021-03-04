@@ -4,6 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :jwt_authenticatable,
          jwt_revocation_strategy: JwtBlacklist
+  after_create :create_profile
 
   def self.fetch_discord_user(code)
     token = fetch_access_token(code)
@@ -65,5 +66,11 @@ class User < ApplicationRecord
 
     response = HTTParty.post(url, :body => {}, :headers => headers)
     response.code == 200 ? JSON(response.read_body) : nil
+  end
+  
+  def create_profile
+    email = @current_user.email
+    user_profile = UserProfile.create(email: email)
+    user_profile.save
   end
 end
