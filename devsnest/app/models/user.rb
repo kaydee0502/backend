@@ -67,5 +67,3 @@ class User < ApplicationRecord
     response.code == 200 ? JSON(response.read_body) : nil
   end
 end
-
-
