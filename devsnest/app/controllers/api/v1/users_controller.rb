@@ -13,12 +13,12 @@ module Api
       end
 
       def report
-        if @bot.present?
+        if @current_user.present?
+          user = @current_user
+        elsif @bot.present?
           discord_id = params[:discord_id]
           user = User.find_by(discord_id: discord_id)
           return render_error('User not found') if user.nil?
-        else
-          user = @current_user
         end
         days = params[:days].to_i || nil
         res = Submission.user_report(days, user.id)
