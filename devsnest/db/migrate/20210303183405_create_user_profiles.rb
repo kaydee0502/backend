@@ -12,7 +12,7 @@ class CreateUserProfiles < ActiveRecord::Migration[6.0]
     	t.integer :roll_number
     	t.string :nationality
     	t.date :dob
-    	t.string :url
+    	t.string :linkedin
 
       t.timestamps
     end

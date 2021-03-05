@@ -4,8 +4,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :jwt_authenticatable,
          jwt_revocation_strategy: JwtBlacklist
-  after_create :create_profile
-  has_one :user_profile
+  # after_create :create_profile
+  # has_one :user_profile
 
   def self.fetch_discord_user(code)
     token = fetch_access_token(code)
@@ -40,6 +40,7 @@ class User < ApplicationRecord
       web_active: true,
       image_url: avatar
     )
+    UserProfile.create(email: email)
   end
 
   def self.fetch_access_token(code)
@@ -74,7 +75,4 @@ class User < ApplicationRecord
   #   myid = @current_user.id
   #   UserProfile.create(email: email, id: myid)
   # end
-  def create_profile
-  (self.user_profile = UserProfile.new).save!
-  end
 end

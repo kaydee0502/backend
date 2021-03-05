@@ -55,7 +55,7 @@ ActiveRecord::Schema.define(version: 2021_03_03_183405) do
     t.integer "roll_number"
     t.string "nationality"
     t.date "dob"
-    t.string "url"
+    t.string "linkedin"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
