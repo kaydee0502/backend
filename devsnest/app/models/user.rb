@@ -5,6 +5,7 @@ class User < ApplicationRecord
          :jwt_authenticatable,
          jwt_revocation_strategy: JwtBlacklist
   after_create :create_profile
+  has_one :user_profile
 
   def self.fetch_discord_user(code)
     token = fetch_access_token(code)
@@ -67,10 +68,13 @@ class User < ApplicationRecord
     response = HTTParty.post(url, :body => {}, :headers => headers)
     response.code == 200 ? JSON(response.read_body) : nil
   end
-  
+
+  # def create_profile
+  #   email = @current_user.email
+  #   myid = @current_user.id
+  #   UserProfile.create(email: email, id: myid)
+  # end
   def create_profile
-    email = @current_user.email
-    user_profile = UserProfile.create(email: email)
-    user_profile.save
+  (self.user_profile = UserProfile.new).save!
   end
 end

@@ -1,4 +1,5 @@
 class UserProfile < ApplicationRecord
+	belongs_to :user
 
 	validates :mobile,:presence => true,
                  :numericality => true,
