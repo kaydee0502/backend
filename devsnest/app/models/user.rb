@@ -40,7 +40,7 @@ class User < ApplicationRecord
       web_active: true,
       image_url: avatar
     )
-    UserProfile.create(email: email)
+    # UserProfile.create(email: email)
   end
 
   def self.fetch_access_token(code)
