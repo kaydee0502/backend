@@ -33,11 +33,22 @@ class Submission < ApplicationRecord
     end
 
     user.score -= 1 if (submission.status == 'done') && (choice != 0)
-    user.score += 1 if (submission.status == 'notdone') && choice.zero?
+    user.score += 1 if (submission.status == 'notdone' || submission.status == 'doubt') && choice.zero?
 
     submission.status = choice
     submission.save
     user.save
     submission
+  end
+
+  def self.recalculate_all_scores
+    User.update_all(score: 0)
+    sub_stats = Submission.where(status: 0).group(:user_id).count
+    user_ids = sub_stats.keys
+    user_ids.each do |user_id|
+      user = User.find_by(id: user_id)
+      user.score = sub_stats[user.id]
+      user.save
+    end
   end
 end
