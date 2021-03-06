@@ -9,10 +9,7 @@ module Api
       def context
         { user: @current_user }
       end
-    end
-
-    def context
-      { user: @current_user }
+      
     end
   end
 end
