@@ -7,7 +7,7 @@ module Api
       before_action :simple_auth, only: %i[leaderboard report show]
       before_action :bot_auth, only: %i[left_discord create index]
       before_action :user_auth, only: [:logout, :me]
-      after_create :create_profile
+      
 
       def me
         render_success(@current_user.as_json.merge({ "type": 'users' }))
