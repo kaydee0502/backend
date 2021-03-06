@@ -8,7 +8,6 @@ module Api
       	end
 
 	    def authorize_member
-	    	byebug
 	        return render_forbidden unless @current_user.id == UserProfile.find_by(id: params[:id]).user_id
 	    end
 	    

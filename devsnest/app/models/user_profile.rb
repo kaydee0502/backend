@@ -10,5 +10,4 @@ class UserProfile < ApplicationRecord
  #             :length => { :minimum => 4, :maximum => 4 }
 
  #    validates :email, format: { with: URI::MailTo::EMAIL_REGEXP } 
-
 end
