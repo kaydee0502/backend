@@ -8,6 +8,10 @@ module Api
       before_action :bot_auth, only: %i[left_discord create index]
       before_action :user_auth, only: [:logout, :me]
 
+      def context
+        { user: @current_user }
+      end
+
       def me
         render_success(@current_user.as_json.merge({ "type": 'users' }))
       end
@@ -27,9 +31,10 @@ module Api
 
       def leaderboard
         page = params[:page].to_i
-        offset = [(page - 1) * 10, 0].max
-        scoreboard = User.order(score: :desc).limit(10).offset(offset)
-        pages_count = (User.count % 10).zero? ? User.count / 10 : User.count / 10 + 1
+        size = params[:size].to_i || 10
+        offset = [(page - 1) * size, 0].max
+        scoreboard = User.order(score: :desc).limit(size).offset(offset)
+        pages_count = (User.count % size).zero? ? User.count / size : User.count / size + 1
         render json: { scoreboard: scoreboard, count: pages_count }
       end
 
