@@ -7,9 +7,9 @@ module Api
       before_action :simple_auth, only: %i[index show]
 
       def context
+        byebug
         { user: @current_user }
       end
-      
     end
   end
 end

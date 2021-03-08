@@ -1,13 +1,13 @@
+# frozen_string_literal: true
+
 class UserProfile < ApplicationRecord
-	belongs_to :user
+  belongs_to :user
 
-	validates :mobile,:presence => true,
-                 :numericality => true,
-                 :length => { :minimum => 10, :maximum => 10 }
+  validates :mobile,
+            numericality: true,
+            length: { minimum: 10, maximum: 12 }
 
-	validates :graduation_year,:presence => true,
-             :numericality => true,
-             :length => { :minimum => 4, :maximum => 4 }
-
-    validates :email, format: { with: URI::MailTo::EMAIL_REGEXP } 
+  validates :graduation_year,
+            numericality: true,
+            length: { minimum: 4, maximum: 4 }
 end

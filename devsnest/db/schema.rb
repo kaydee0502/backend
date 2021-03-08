@@ -46,12 +46,10 @@ ActiveRecord::Schema.define(version: 2021_03_03_183405) do
   create_table "user_profiles", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "user_id"
     t.string "full_name"
-    t.string "email"
     t.integer "mobile"
     t.string "college_name"
     t.string "branch"
     t.integer "graduation_year"
-    t.integer "current_year"
     t.integer "roll_number"
     t.string "nationality"
     t.date "dob"
