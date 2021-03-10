@@ -17,7 +17,7 @@ module Api
       def group_id
         return nil if context[:user].nil?
 
-        member = GroupMembers.where(user_id: context[:user].id).first
+        member = GroupMember.where(user_id: context[:user].id).first
         member.present? ? member.group_id : nil
       end
     end

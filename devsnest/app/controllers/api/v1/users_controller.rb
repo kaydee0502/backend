@@ -13,7 +13,7 @@ module Api
       end
 
       def me
-        render_success(@current_user.as_json.merge({ "type": 'users' }))
+        redirect_to api_v1_user_url(@current_user)
       end
 
       def report
