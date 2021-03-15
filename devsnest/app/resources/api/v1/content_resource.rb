@@ -9,6 +9,8 @@ module Api
       filter :parent_id
       filter :unique_id
       filter :data_type
+      filter :question_type
+      filter :difficulty
       def self.default_sort
         [{ field: 'priority', direction: :asc }]
       end
