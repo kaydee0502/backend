@@ -4,6 +4,7 @@ namespace :add_groups do
   require 'csv'
   task data: :environment do
     Group.destroy_all
+    GroupMember.destroy_all
     filename = File.join Rails.root, 'scripts/group_formation.csv'
     errors = []
     CSV.foreach(filename, headers: true) do |row|
@@ -21,6 +22,7 @@ namespace :add_groups do
           puts "*" * 80
           puts "#{row[2]}, #{group.name}"
           puts "*" * 80
+          next
         end
 
         GroupMember.create(user_id: user.id, group_id: group.id)
@@ -30,6 +32,7 @@ namespace :add_groups do
           puts "*" * 80
           puts "#{row[7]}, #{group.name}"
           puts "*" * 80
+          next
         end
         group.owner_id = owner.id
         group.save
