@@ -16,12 +16,13 @@ module Api
       end
 
       def status
-        return "notdone" if context[:user].nil?
+        return 'notdone' if context[:user].nil?
 
         user_id = context[:user].id
         submission = Submission.where(user_id: user_id, content_id: @model.id).first
         return submission.status if submission.present?
-        return "notdone"
+
+        'notdone'
       end
     end
   end

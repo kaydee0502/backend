@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_22_225911) do
+ActiveRecord::Schema.define(version: 2021_04_01_191055) do
 
   create_table "batches", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "owner_id"
@@ -74,6 +74,11 @@ ActiveRecord::Schema.define(version: 2021_03_22_225911) do
     t.integer "group_member_id"
     t.boolean "attendence"
     t.string "data"
+    t.boolean "saw_last_lecture"
+    t.string "till_which_tha_you_are_done"
+    t.string "what_cover_today"
+    t.string "reason_for_backlog"
+    t.integer "rate_yesterday_class"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["group_id"], name: "index_scrums_on_group_id"
@@ -88,6 +93,23 @@ ActiveRecord::Schema.define(version: 2021_03_22_225911) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id", "content_id"], name: "index_submissions_on_user_id_and_content_id", unique: true
+  end
+
+  create_table "user_profiles", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "full_name"
+    t.string "email"
+    t.integer "mobile"
+    t.string "college_name"
+    t.string "branch"
+    t.integer "graduation_year"
+    t.integer "current_year"
+    t.integer "roll_number"
+    t.string "nationality"
+    t.date "dob"
+    t.string "url"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -110,6 +132,7 @@ ActiveRecord::Schema.define(version: 2021_03_22_225911) do
     t.string "provider"
     t.boolean "discord_active", default: false
     t.boolean "web_active", default: false
+    t.integer "group_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

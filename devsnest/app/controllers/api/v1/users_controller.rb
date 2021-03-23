@@ -6,7 +6,7 @@ module Api
       include JSONAPI::ActsAsResourceController
       before_action :simple_auth, only: %i[leaderboard report show]
       before_action :bot_auth, only: %i[left_discord create index]
-      before_action :user_auth, only: [:logout, :me]
+      before_action :user_auth, only: %i[logout me]
 
       def context
         { user: @current_user }
@@ -68,9 +68,9 @@ module Api
         if user.present?
           sign_in(user)
           set_current_user
-          return render_success(user.as_json.merge({ "type": 'users'})) if @current_user.present?
+          return render_success(user.as_json.merge({ "type": 'users' })) if @current_user.present?
         end
-        return render_error({message: "Error occured while authenticating"})
+        render_error({ message: 'Error occured while authenticating' })
       end
     end
   end

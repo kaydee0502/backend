@@ -53,5 +53,7 @@ module Devsnest
     # config.middleware.use ActionDispatch::Session::CookieStore, config.session_options
     # Rails.application.config.session_store :disabled
     # config.middleware.delete ActionDispatch::Session::CookieStore
+    config.time_zone = 'Eastern Time (US & Canada)'
+    config.active_record.default_timezone = :local
   end
 end

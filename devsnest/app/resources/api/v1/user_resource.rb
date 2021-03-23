@@ -10,7 +10,7 @@ module Api
         if context[:user].nil? || context[:user].id == @model.id
           super - [:password]
         else
-          super - [:password, :email]
+          super - %i[password email]
         end
       end
 

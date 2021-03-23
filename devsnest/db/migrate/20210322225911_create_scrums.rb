@@ -6,6 +6,11 @@ class CreateScrums < ActiveRecord::Migration[6.0]
       t.integer :group_member_id
     	t.boolean :attendence
     	t.string :data
+      t.boolean :saw_last_lecture
+      t.string :till_which_tha_you_are_done
+      t.string :what_cover_today
+      t.string :reason_for_backlog
+      t.integer :rate_yesterday_class
 
       t.timestamps
     end
