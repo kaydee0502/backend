@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_15_234220) do
+ActiveRecord::Schema.define(version: 2021_03_22_225911) do
 
   create_table "batches", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "owner_id"
@@ -52,16 +52,6 @@ ActiveRecord::Schema.define(version: 2021_03_15_234220) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "groupcalls", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "choice"
-    t.integer "week"
-    t.integer "year"
-    t.integer "group_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "groups", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "owner_id"
     t.integer "batch_id"
@@ -78,33 +68,17 @@ ActiveRecord::Schema.define(version: 2021_03_15_234220) do
     t.index ["jti"], name: "index_jwt_blacklists_on_jti"
   end
 
-  create_table "mentee_feedbacks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "user_id"
-    t.integer "mentee_id"
-    t.text "feedback"
-    t.integer "effort"
-    t.integer "understanding"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "mentor_feedbacks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "user_id"
-    t.integer "mentor_id"
-    t.text "feedback"
-    t.integer "timeGiven"
-    t.integer "capability"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "mmts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "scrums", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "group_id"
     t.integer "user_id"
-    t.integer "mentor_id"
+    t.integer "group_member_id"
+    t.boolean "attendence"
+    t.string "data"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["mentor_id"], name: "index_mmts_on_mentor_id", unique: true
-    t.index ["user_id"], name: "index_mmts_on_user_id", unique: true
+    t.index ["group_id"], name: "index_scrums_on_group_id"
+    t.index ["group_member_id"], name: "index_scrums_on_group_member_id"
+    t.index ["user_id"], name: "index_scrums_on_user_id"
   end
 
   create_table "submissions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -138,14 +112,6 @@ ActiveRecord::Schema.define(version: 2021_03_15_234220) do
     t.boolean "web_active", default: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-  end
-
-  create_table "writeups", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.integer "user_id"
-    t.text "description"
-    t.integer "week"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
   end
 
 end
