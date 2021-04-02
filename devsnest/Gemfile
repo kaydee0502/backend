@@ -41,16 +41,16 @@ group :development do
 end
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors', '~> 1.1.1'
-gem 'sentry-rails'
-gem 'sentry-ruby'
-gem 'sentry-sidekiq'
+gem 'sentry-rails', '~> 4.2.1'
+gem 'sentry-ruby', '~> 4.2.1'
+gem 'sentry-sidekiq', '~> 4.2.0'
 
 gem 'dotenv', '~> 2.7', '>= 2.7.6'
 gem 'jsonapi-resources', '~> 0.10.2'
 
-gem 'httparty'
+gem 'httparty', '~> 0.18.1'
 gem 'redis'
-gem 'redis-namespace'
+gem 'redis-namespace', '~> 1.8.1'
 gem 'redis-rails'
 gem 'sidekiq-cron'
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

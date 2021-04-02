@@ -4,7 +4,7 @@ class CreateScrums < ActiveRecord::Migration[6.0]
     	t.integer :group_id
     	t.integer :user_id
       t.integer :group_member_id
-    	t.boolean :attendence
+    	t.boolean :attendance
     	t.string :data
       t.boolean :saw_last_lecture
       t.string :till_which_tha_you_are_done
