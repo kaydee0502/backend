@@ -3,7 +3,7 @@
 module Api
   module V1
     class UserResource < JSONAPI::Resource
-      attributes :email, :name, :password, :discord_id, :web_active, :username, :score, :discord_active
+      attributes :email, :name, :password, :discord_id, :google_id, :web_active, :username, :score, :discord_active
       attributes :group_id
 
       def fetchable_fields
