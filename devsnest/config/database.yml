@@ -13,6 +13,7 @@ default: &default
   username: <%= ENV["MYSQL_USERNAME"]  %>
   password: <%= ENV["MYSQL_PASSWORD"] %>
   encoding: utf8
+  socket: /var/run/mysqld/mysqld.sock
 
 development:
   <<: *default
