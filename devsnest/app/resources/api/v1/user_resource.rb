@@ -3,8 +3,10 @@
 module Api
   module V1
     class UserResource < JSONAPI::Resource
-      attributes :email, :name, :password, :discord_id, :web_active, :username, :score, :discord_active
-      attributes :group_id
+      attributes :email, :name, :password, :discord_id, :web_active, :username, :score, :discord_active, :batch, :grad_status, :grad_specialization, :grad_year
+      attributes :group_id, :group_name 
+      attributes :college
+      attributes :easy_solved, :medium_solved, :hard_solved
 
       def fetchable_fields
         if context[:user].nil? || context[:user].id == @model.id
@@ -16,10 +18,39 @@ module Api
 
       def group_id
         return nil if context[:user].nil?
-
         member = GroupMember.where(user_id: context[:user].id).first
         member.present? ? member.group_id : nil
       end
+
+      def group_name
+        return nil if context[:user].nil?
+        member = GroupMember.where(user_id: context[:user].id).first 
+        groupId = member.present? ? member.group_id : nil
+        group =  Group.where(id: groupId).first
+        group.present? ? group.name : nil
+      end
+
+      def college
+        return nil if context[:user].nil?
+        member = College.where(user_id: context[:user].id).first       
+        member.present? ? member.name : nil
+      end
+
+      def easy_solved
+        return nil if context[:user].nil?
+        Submission.count_solved(context[:user].id, "easy")
+      end   
+
+      def medium_solved
+        return nil if context[:user].nil?
+        Submission.count_solved(context[:user].id, "medium")
+      end  
+
+      def hard_solved
+        return nil if context[:user].nil?
+        Submission.count_solved(context[:user].id, "hard")
+      end  
+
     end
   end
 end
