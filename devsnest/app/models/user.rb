@@ -62,7 +62,6 @@ class User < ApplicationRecord
     email = user_details['email']
     username = user_details['username']
     user = User.where(discord_id: user_details['id']).first
-    byebug
     if user.nil?
       user = User.where(id: context[:user].id)
     end
@@ -110,5 +109,14 @@ class User < ApplicationRecord
 
     response = HTTParty.post(url, :body => {}, :headers => headers)
     response.code == 200 ? JSON(response.read_body) : nil
+  end
+  
+  def self.update_discord_id(user,temp_user)
+    user.discord_id = temp_user.discord_id
+    user.bot_token = temp_user.bot_token
+    user.save
+    user
+    temp_user_id = temp_user.id
+    temp_user = User.destroy(temp_user_id)
   end
 end
