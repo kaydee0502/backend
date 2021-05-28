@@ -6,7 +6,8 @@ module Api
       include JSONAPI::ActsAsResourceController
       before_action :simple_auth, only: %i[leaderboard report show]
       before_action :bot_auth, only: %i[left_discord create index]
-      before_action :user_auth, only: [:logout, :me]
+      before_action :user_auth, only: %i[logout me update]
+      before_action :update_college, only: %i[update]
 
       def context
         { user: @current_user }
@@ -73,18 +74,16 @@ module Api
         return render_error({message: "Error occured while authenticating"})
       end
 
-      def update
-        user_id = params['data']['id']
-        user = params['data']['attributes']
-        group_name = params['data']['attributes']['group_name']
-        college_name = params['data']['attributes']['college']
-        if group_name.present?
-          Group.update_group_name(user_id, group_name)
-        end 
-        if college_name.present?
-           College.update_college_name(user_id, college_name) 
-        end   
-        return render_success({message: "User updated Successfully"})      
+      def update_college
+        college_name = params['data']['attributes']['college_name']
+        
+        if College.exists?(:name => college_name)
+          params['data']['attributes']['college_id'] = College.find_by(name: college_name).id
+        else
+          College.create_college(college_name)
+          params['data']['attributes']['college_id']  = College.find_by(name: college_name).id
+        end
+        params['data']['attributes'].delete 'college_name'
       end        
     end
   end

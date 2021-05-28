@@ -52,14 +52,24 @@ class Submission < ApplicationRecord
     end
   end
 
-  def self.count_solved(user_id, difficulty_level)
+  def self.count_solved(user_id)
     content = Submission.where(user_id: user_id, status: 0).pluck(:content_id)
+    solves = Hash["easy" => 0,"medium" => 0,"hard" => 0]
     count = 0
     for content_id in content do 
-     if Content.where(id: content_id).first.difficulty == difficulty_level then
-       count +=1
-     end  
+      
+     if Content.where(id: content_id).first.difficulty == "easy" then
+       #byebug
+       solves["easy"] += 1
+       
+     elsif Content.where(id: content_id).first.difficulty == "medium" then
+       solves["medium"] += 1
+
+     elsif Content.where(id: content_id).first.difficulty == "hard" then
+        solves["hard"] += 1
+
+     end
     end 
-    count 
+    solves
   end  
 end
