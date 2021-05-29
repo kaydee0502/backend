@@ -20,12 +20,6 @@ module Api
         member = GroupMember.where(user_id: context[:user].id).first
         member.present? ? member.group_id : nil
       end
-
-      def bot_token
-        @model.bot_token = Digest::SHA1.hexdigest([Time.now, rand].join)
-        @model.save
-      end
-
     end
   end
 end
