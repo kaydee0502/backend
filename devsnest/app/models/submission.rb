@@ -23,10 +23,8 @@ class Submission < ApplicationRecord
     user = User.find(user_id)
 
     unless submission.present?
-
       submission = Submission.create(user_id: user_id, content_id: content_id, status: choice)
       user.score = 0 if user.score.nil?
-
       user.score += 1 if choice.zero?
       user.save
       return submission
@@ -34,7 +32,6 @@ class Submission < ApplicationRecord
 
     user.score -= 1 if (submission.status == 'done') && (choice != 0)
     user.score += 1 if (submission.status == 'notdone' || submission.status == 'doubt') && choice.zero?
-
     submission.status = choice
     submission.save
     user.save
@@ -53,23 +50,11 @@ class Submission < ApplicationRecord
   end
 
   def self.count_solved(user_id)
-    content = Submission.where(user_id: user_id, status: 0).pluck(:content_id)
-    solves = Hash["easy" => 0,"medium" => 0,"hard" => 0]
-    count = 0
-    for content_id in content do 
-      
-     if Content.where(id: content_id).first.difficulty == "easy" then
-       #byebug
-       solves["easy"] += 1
-       
-     elsif Content.where(id: content_id).first.difficulty == "medium" then
-       solves["medium"] += 1
+    content_ids = Submission.where(user_id: user_id, status: 0).pluck(:content_id)
+    Content.where(id: content_ids).group(:difficulty).count
+  end
 
-     elsif Content.where(id: content_id).first.difficulty == "hard" then
-        solves["hard"] += 1
-
-     end
-    end 
-    solves
-  end  
+  def self.user_activity(user_id)
+    Submission.where(status: %w[done doubt], user_id: user_id).group('DATE(updated_at)').count
+  end
 end

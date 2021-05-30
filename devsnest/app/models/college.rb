@@ -1,9 +1,8 @@
-class College < ApplicationRecord
+# frozen_string_literal: true
 
+# college class
+class College < ApplicationRecord
   def self.create_college(college_name)
-    college = College.new
-    college.name = college_name
-    p college_name
-    college.save
+    College.create(name: college_name)
   end
 end

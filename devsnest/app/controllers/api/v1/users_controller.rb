@@ -69,22 +69,19 @@ module Api
         if user.present?
           sign_in(user)
           set_current_user
-          return render_success(user.as_json.merge({ "type": 'users'})) if @current_user.present?
+          return render_success(user.as_json.merge({ "type": 'users' })) if @current_user.present?
         end
-        return render_error({message: "Error occured while authenticating"})
+        render_error({ message: 'Error occured while authenticating' })
       end
 
       def update_college
         college_name = params['data']['attributes']['college_name']
-        
-        if College.exists?(:name => college_name)
-          params['data']['attributes']['college_id'] = College.find_by(name: college_name).id
-        else
-          College.create_college(college_name)
-          params['data']['attributes']['college_id']  = College.find_by(name: college_name).id
-        end
+        return true unless college_name.present?
+
+        College.create_college(college_name) unless College.exists?(name: college_name)
+        params['data']['attributes']['college_id'] = College.find_by(name: college_name).id
         params['data']['attributes'].delete 'college_name'
-      end        
+      end
     end
   end
 end

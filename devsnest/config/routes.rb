@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   get '/health_check', to: 'health_check#index'
   namespace :api do
     namespace :v1 do
-      devise_for :users, skip:[:registrations]
+      devise_for :users, skip: [:registrations]
       jsonapi_resources :users, only: %i[index show update create] do
         collection do
           get :report, :leaderboard, :me
@@ -17,7 +17,7 @@ Rails.application.routes.draw do
       jsonapi_resources :submissions, only: %i[create]
       jsonapi_resources :groups, only: %i[show]
       jsonapi_resources :group_members, only: %i[index show]
+      jsonapi_resources :college, only: %i[index]
     end
   end
 end
-
