@@ -45,6 +45,8 @@ gem 'sentry-rails'
 gem 'sentry-ruby'
 gem 'sentry-sidekiq'
 gem 'meta_request'
+gem 'newrelic_rpm'
+gem 'newrelic-infinite_tracing'
 
 gem 'dotenv', '~> 2.7', '>= 2.7.6'
 gem 'jsonapi-resources', '~> 0.10.2'
