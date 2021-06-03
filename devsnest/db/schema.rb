@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_28_122434) do
+ActiveRecord::Schema.define(version: 2021_06_03_143854) do
 
   create_table "batches", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
     t.integer "owner_id"
@@ -54,6 +54,7 @@ ActiveRecord::Schema.define(version: 2021_05_28_122434) do
     t.integer "student_mentor_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "co_owner"
   end
 
   create_table "groups", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
@@ -64,6 +65,8 @@ ActiveRecord::Schema.define(version: 2021_05_28_122434) do
     t.integer "student_mentor_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "co_owner_id"
+    t.integer "batch_leader_id"
   end
 
   create_table "jwt_blacklists", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
