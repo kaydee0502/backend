@@ -133,7 +133,6 @@ ActiveRecord::Schema.define(version: 2021_06_11_150521) do
     t.integer "college_id"
     t.string "registration_num"
     t.integer "user_type", default: 0
-    t.string "bot_token"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
