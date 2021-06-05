@@ -14,8 +14,15 @@ module Api
       def check_authorization
         group = Group.find_by(id: params[:group_id])
         return render_not_found unless group.present?
-
-        return render_forbidden unless group.group_members.where(user_id: @current_user.id).present?
+        if !(group.group_members.where(user_id: @current_user.id).present? || group.batch_leader_id == @current_user.id || @current_user.user_type == 2)
+          return render_forbidden
+        end   
+      end
+      def show
+        if @current_user.user_type == 2
+          @members = GroupMembers.all
+          return render :json => @members
+        end
       end
     end
   end
