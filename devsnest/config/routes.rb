@@ -10,13 +10,13 @@ Rails.application.routes.draw do
           get :report, :leaderboard, :me
           put :left_discord
           post :login
-          delete :logout
+          delete :logout          
         end
       end
       jsonapi_resources :contents, only: %i[index show]
       jsonapi_resources :submissions, only: %i[create]
-      jsonapi_resources :groups, only: %i[show]
-      jsonapi_resources :group_members, only: %i[index show]
+      jsonapi_resources :groups, only: %i[show index]
+      jsonapi_resources :group_members, only: %i[index show]      
     end
   end
 end
