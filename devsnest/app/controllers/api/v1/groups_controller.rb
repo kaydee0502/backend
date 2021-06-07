@@ -15,7 +15,7 @@ module Api
       def check_authorization
         group = Group.find_by(id: params[:id])
         return render_not_found unless group.present?
-        if !(group.group_members.where(user_id: @current_user.id).present? || group.batch_leader_id == @current_user.id || @current_user.user_type == 2)
+        if !(group.group_members.where(user_id: @current_user.id).present? || group.batch_leader_id == @current_user.id || @current_user.user_type == 1)
           return render_forbidden
         end
       end
@@ -29,17 +29,17 @@ module Api
 
       def index
         if @current_user.user_type == 0
-          @groups = Group.find_by(id: params[:id])
+          batch_leader = Group.find_by(batch_leader_id: @current_user.id)
+          if batch_leader.nil?            
+            @groups = Group.where(id: GroupMember.find_by(user_id: @current_user.id).group_id )
+          else
+            @groups = Group.where(batch_leader_id: @current_user.id).or(Group.where(id: GroupMember.find_by(user_id: @current_user.id).group_id ))
+          end        
         elsif @current_user.user_type == 1
-          @groups = Group.where(batch_leader_id: @current_user.id)
-        elsif @current_user.user_type == 2
           @groups = Group.all 
-        end
-        
-        response = { :data => @groups, :my_group => GroupMember.find_by(user_id: @current_user.id).group_id }
-
+        end        
+        response = { :data => @groups, :my_group_id => GroupMember.find_by(user_id: @current_user.id).group_id }
         render :json => response
-
       end
     end
   end
