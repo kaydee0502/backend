@@ -104,8 +104,6 @@ GEM
       ruby2_keywords
     faraday-net_http (1.0.1)
     ffi (1.13.1)
-    friendly_id (5.4.2)
-      activerecord (>= 4.0.0)
     fugit (1.4.2)
       et-orbi (~> 1.1, >= 1.1.8)
       raabro (~> 1.4)
@@ -297,7 +295,6 @@ DEPENDENCIES
   byebug
   devise-jwt (~> 0.8.0)
   dotenv (~> 2.7, >= 2.7.6)
-  friendly_id
   httparty
   jsonapi-resources (~> 0.10.2)
   listen (~> 3.2)
