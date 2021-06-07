@@ -43,6 +43,17 @@ ActiveRecord::Schema.define(version: 2021_06_11_150521) do
     t.index ["unique_id"], name: "index_contents_on_unique_id"
   end
 
+  create_table "friendly_id_slugs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.string "slug", null: false
+    t.integer "sluggable_id", null: false
+    t.string "sluggable_type", limit: 50
+    t.string "scope"
+    t.datetime "created_at"
+    t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true, length: { slug: 70, scope: 70 }
+    t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type", length: { slug: 140 }
+    t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
+  end
+
   create_table "group_members", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
     t.boolean "scrum_master"
     t.boolean "owner"
@@ -75,6 +86,24 @@ ActiveRecord::Schema.define(version: 2021_06_11_150521) do
     t.string "jti", null: false
     t.datetime "exp"
     t.index ["jti"], name: "index_jwt_blacklists_on_jti"
+  end
+
+  create_table "scrums", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.integer "group_id"
+    t.integer "user_id"
+    t.integer "group_member_id"
+    t.boolean "attendance"
+    t.string "data"
+    t.boolean "saw_last_lecture"
+    t.string "till_which_tha_you_are_done"
+    t.string "what_cover_today"
+    t.string "reason_for_backlog"
+    t.integer "rate_yesterday_class"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["group_id"], name: "index_scrums_on_group_id"
+    t.index ["group_member_id"], name: "index_scrums_on_group_member_id"
+    t.index ["user_id"], name: "index_scrums_on_user_id"
   end
 
   create_table "submissions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
@@ -116,8 +145,6 @@ ActiveRecord::Schema.define(version: 2021_06_11_150521) do
     t.date "dob"
     t.integer "college_id"
     t.string "registration_num"
-    t.integer "grad_start"
-    t.integer "grad_end"
     t.integer "user_type", default: 0
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
