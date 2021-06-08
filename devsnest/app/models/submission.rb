@@ -54,7 +54,7 @@ class Submission < ApplicationRecord
     Content.where(id: content_ids).group(:difficulty).count
   end
 
-  def self.activity(user_id)
+  def self.user_activity(user_id)
     Submission.where(status: %w[done doubt], user_id: user_id).group('DATE(updated_at)').count
   end
 end
