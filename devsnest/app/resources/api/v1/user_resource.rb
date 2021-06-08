@@ -57,7 +57,7 @@ module Api
       def activity
         return nil if context[:user].nil?
 
-        Submission.activity(context[:user])
+        Submission.user_activity(context[:user])
       end
     end
   end

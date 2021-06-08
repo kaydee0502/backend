@@ -8,5 +8,9 @@ class AddColumnToUser < ActiveRecord::Migration[6.0]
     add_column :users, :linkedin_url, :string
     add_column :users, :resume_url, :string
     add_column :users, :dob, :date
+    add_column :users, :college_id, :integer
+    add_column :users, :registration_num, :string
+    add_column :users, :grad_start, :integer
+    add_column :users, :grad_end, :integer
   end
 end
