@@ -79,6 +79,7 @@ module Api
 
         College.create_college(college_name) unless College.exists?(name: college_name)
         params['data']['attributes']['college_id'] = College.find_by(name: college_name).id
+
         params['data']['attributes'].delete 'college_name'
       end
     end

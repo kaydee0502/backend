@@ -12,14 +12,14 @@ module Api
 
       def fetchable_fields
         if context[:user].nil? || context[:user].id == @model.id
-          super - %i[password college_id]
+          super - %i[password]
         else
-          super - %i[password email college_id]
+          super - %i[password email]
         end
       end
 
       def self.updatable_fields(context)
-        super - %i[score group_id group_name discord_id password]
+        super - %i[score group_id group_name discord_id password college_name]
       end
 
       def group_id
@@ -37,9 +37,13 @@ module Api
       end
 
       def college_name
-        return nil if context[:user].nil? || context[:user].college_id.nil?
+        user = context[:user]
+        return nil if user.nil?
 
-        College.where(id: context[:user].college_id).first.name || nil
+        user.reload
+        return nil if user.college_id.nil?
+
+        College.find_by(id: user.college_id).name
       end
 
       def solved
