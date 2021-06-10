@@ -3,7 +3,7 @@
 module Api
   module V1
     class GroupResource < JSONAPI::Resource
-      attributes :name, :owner_id, :co_owner_id, :members_count, :student_mentor_id, :owner_name, :co_owner_name
+      attributes :name, :owner_id, :co_owner_id, :members_count, :student_mentor_id, :owner_name, :co_owner_name, :batch_leader_id, :slug, :my_group
       has_many :group_members
       
       def self.records(options = {})
@@ -20,6 +20,9 @@ module Api
           group_ids = Group.all.ids
         end        
         super(options).where(id: group_ids)
+      end
+      def my_group
+        GroupMember.find_by(user_id: context[:user].id).group_id
       end       
     end    
   end
