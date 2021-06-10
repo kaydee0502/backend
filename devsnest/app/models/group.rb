@@ -4,11 +4,10 @@ class Group < ApplicationRecord
   # belongs_to :batch
   has_many :group_members
   
-  def self.check_auth(group, user)
-    unless group.group_members.where(user_id: user.id).present? || group.batch_leader_id == user.id || user.user_type == "admin"  
-      return false
-    else 
+  def check_auth(user)
+    if self.group_members.where(user_id: user.id).present? || self.batch_leader_id == user.id || user.user_type == "admin"  
       return true
     end
+    false 
   end
 end

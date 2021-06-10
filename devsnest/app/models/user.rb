@@ -92,6 +92,14 @@ class User < ApplicationRecord
     response.code == 200 ? JSON(response.read_body) : nil
   end
 
+  def self.fetch_group_ids(user)
+    if user.user_type == "user"
+      Group.where(batch_leader_id: user.id).pluck(:id) + GroupMember.where(user_id: user.id).pluck(:group_id)        
+    elsif user.user_type == "admin"
+      Group.all.ids
+    end
+  end
+
   def self.update_discord_id(user, temp_user)
     user.discord_id = temp_user.discord_id
     Submission.merge_submission(temp_user, user)
