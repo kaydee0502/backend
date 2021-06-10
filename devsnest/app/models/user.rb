@@ -5,6 +5,8 @@ class User < ApplicationRecord
          :jwt_authenticatable,
          jwt_revocation_strategy: JwtBlacklist
 
+  enum user_type: [:user, :admin] 
+
   def self.fetch_discord_user(code)
     token = fetch_access_token(code)
     return if token.nil?
