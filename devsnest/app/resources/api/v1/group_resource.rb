@@ -7,20 +7,20 @@ module Api
       has_many :group_members
       
       def self.records(options = {})
-        # byebug
-        user = options[:context][:user]
-        # group = options[:context][:group]
-        if user.user_type == 0
+        user = options[:context][:user]        
+        group = options[:context][:group]
+        if user.user_type == "user"
           batch_leader = Group.find_by(batch_leader_id: user.id)
           if batch_leader.nil?            
-            options[:context][:groups] = Group.where(id: GroupMember.find_by(user_id: user.id).group_id)
+            group_ids = Group.where(id: GroupMember.find_by(user_id: user.id).group_id).ids
           else
-            options[:context][:groups] = Group.where(batch_leader_id: user.id).or(Group.where(id: GroupMember.find_by(user_id: user.id).group_id ))
+            group_ids = Group.where(batch_leader_id: user.id).or(Group.where(id: GroupMember.find_by(user_id: user.id).group_id )).ids
           end        
-        elsif user.user_type == 1
-          options[:context][:groups] = Group.all 
-        end
-      end      
+        elsif user.user_type == "admin"
+          group_ids = Group.all.ids
+        end        
+        super(options).where(id: group_ids)
+      end       
     end    
   end
 end
