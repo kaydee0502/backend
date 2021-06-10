@@ -76,7 +76,11 @@ module Api
 
       def update_college
         college_name = params['data']['attributes']['college_name']
-        return unless college_name.present?
+
+        unless college_name.present?
+          params['data']['attributes'].delete 'college_name'
+          return true
+        end
 
         College.create_college(college_name) unless College.exists?(name: college_name)
         params['data']['attributes']['college_id'] = College.find_by(name: college_name).id
