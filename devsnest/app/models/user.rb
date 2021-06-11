@@ -5,7 +5,7 @@ class User < ApplicationRecord
          :jwt_authenticatable,
          jwt_revocation_strategy: JwtBlacklist
 
-  enum user_type: [:user, :admin] 
+  enum user_type: [:user, :admin]
 
   def self.fetch_discord_user(code)
     token = fetch_access_token(code)
@@ -71,7 +71,7 @@ class User < ApplicationRecord
 
   def fetch_group_ids
     if self.user_type == "user"
-      Group.where(batch_leader_id: self.id).pluck(:id) + GroupMember.where(user_id: self.id).pluck(:group_id)        
+      Group.where(batch_leader_id: self.id).pluck(:id) + GroupMember.where(user_id: self.id).pluck(:group_id)    
     elsif self.user_type == "admin"
       Group.all.ids
     end
