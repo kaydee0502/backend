@@ -16,8 +16,7 @@ module Api
         return render_not_found unless group.present?
 
         return render_forbidden unless group.check_auth(@current_user)
-
-      end      
+      end
     end
   end
 end

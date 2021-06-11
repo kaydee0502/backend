@@ -66,8 +66,6 @@ ActiveRecord::Schema.define(version: 2021_06_11_150521) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "co_owner_id"
     t.integer "batch_leader_id"
-    t.string "owner_name"
-    t.string "co_owner_name"
     t.string "slug"
   end
 
