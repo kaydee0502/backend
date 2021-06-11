@@ -5,8 +5,8 @@ module Api
     class UsersController < ApplicationController
       include JSONAPI::ActsAsResourceController
       before_action :simple_auth, only: %i[leaderboard report show]
-      before_action :bot_auth, only: %i[left_discord create index]
-      before_action :user_auth, only: %i[logout me update]
+      before_action :bot_auth, only: %i[left_discord create index get_token]
+      before_action :user_auth, only: %i[logout me update connect_discord]
       before_action :update_college, only: %i[update]
 
       def context
@@ -15,6 +15,14 @@ module Api
 
       def me
         redirect_to api_v1_user_url(@current_user)
+      end
+
+      def get_token
+        discord_id = params['data']['attributes']['discord_id']
+        user = User.find_by(discord_id: discord_id)
+        return render json: { bot_token: user.bot_token } if user.present?
+
+        render_error('User not found')
       end
 
       def report
@@ -60,12 +68,41 @@ module Api
       end
 
       def logout
-        render json: { notice: 'You logged out successfuly' }
+        render json: { notice: 'You logged out successfully' }
+      end
+
+      def connect_discord
+        if params['code'].present?
+          code = params['code']
+          discord_id = User.fetch_discord_id(code)
+          return render_error({ message: 'Incorrect code from discord' }) if discord_id.nil?
+
+          tmp_user = User.find_by(discord_id: discord_id)
+          return render_error({ message: 'Discord User is already connected to another user' }) if tmp_user.present? && tmp_user.web_active?
+
+          user = User.merge_discord_user(discord_id, @current_user)
+          return render_error({ message: 'Failed to connect discord' }) if user.discord_id.nil?
+
+          render_success(user.as_json.merge({ "type": 'users' }))
+        elsif params['data']['attributes']['bot_token'].present?
+          token = params['data']['attributes']['bot_token']
+          temp_user = User.find_by(bot_token: token)
+          return render_error({ message: 'Could not find user of provided token' }) if temp_user.nil?
+          return render_error({ message: 'Discord User is already connected to another user' }) if temp_user.web_active?
+
+          User.update_discord_id(@current_user, temp_user)
+          render_success(@current_user.as_json.merge({ "type": 'users' }))
+        else
+          render_error({ message: 'Please send either the token or discord code' })
+        end
       end
 
       def login
         code = params['code']
-        user = User.fetch_discord_user(code)
+        googleId = params['googleId']
+        return render_error({ message: 'googleId parameter not specified' }) unless googleId
+
+        user = User.fetch_google_user(code, googleId)
         if user.present?
           sign_in(user)
           set_current_user
