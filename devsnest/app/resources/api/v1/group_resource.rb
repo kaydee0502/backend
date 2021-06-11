@@ -8,11 +8,9 @@ module Api
       
       def self.records(options = {})
         user = options[:context][:user]
-        group_ids = User.fetch_group_ids(user)                       
+        group_ids = user.fetch_group_ids                       
         super(options).where(id: group_ids)
       end      
     end    
   end
 end
-
-

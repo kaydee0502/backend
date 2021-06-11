@@ -7,6 +7,7 @@ module Api
       before_action :simple_auth
       before_action :deslug, only: %i[show]
       before_action :check_authorization, only: %i[show]
+      before_action :parameterize, only: %i[create update]
 
       def context
         { user: @current_user }
@@ -15,9 +16,13 @@ module Api
       def check_authorization
         group = Group.find_by(id: params[:id])
         return render_not_found unless group.present?
-        unless Group.check_auth(@current_user)
-          return render_forbidden
-        end        
+        
+        return render_forbidden unless group.check_auth(@current_user)
+      
+      end
+
+      def parameterize
+        params[:data][:attributes][:slug] = params[:data][:attributes][:name].parameterize
       end
 
       def deslug
