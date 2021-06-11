@@ -69,13 +69,11 @@ class User < ApplicationRecord
     response.code == 200 ? JSON(response.read_body) : nil
   end
 
-  def self.fetch_group_ids(user)
-    if user.user_type == "user"
-      Group.where(batch_leader_id: user.id).pluck(:id) + GroupMember.where(user_id: user.id).pluck(:group_id)        
-    elsif user.user_type == "admin"
+  def fetch_group_ids
+    if self.user_type == "user"
+      Group.where(batch_leader_id: self.id).pluck(:id) + GroupMember.where(user_id: self.id).pluck(:group_id)        
+    elsif self.user_type == "admin"
       Group.all.ids
     end
   end
 end
-
-

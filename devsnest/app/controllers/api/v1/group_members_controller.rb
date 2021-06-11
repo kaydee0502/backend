@@ -14,9 +14,9 @@ module Api
       def check_authorization
         group = Group.find_by(id: params[:group_id])
         return render_not_found unless group.present?
-        unless group.check_auth(@current_user)
-          return render_forbidden
-        end            
+
+        return render_forbidden unless group.check_auth(@current_user)
+
       end      
     end
   end
