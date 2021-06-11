@@ -2,5 +2,5 @@
 
 class Group < ApplicationRecord
   # belongs_to :batch
-  has_many :group_members
+  has_many :group_members  
 end

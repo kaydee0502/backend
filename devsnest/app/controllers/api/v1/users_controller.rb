@@ -6,7 +6,8 @@ module Api
       include JSONAPI::ActsAsResourceController
       before_action :simple_auth, only: %i[leaderboard report show]
       before_action :bot_auth, only: %i[left_discord create index get_token]
-      before_action :user_auth, only: %i[logout me connect_discord]
+      before_action :user_auth, only: %i[logout me update connect_discord]
+      before_action :update_college, only: %i[update]
 
       def context
         { user: @current_user }
@@ -81,14 +82,16 @@ module Api
 
           user = User.merge_discord_user(discord_id, @current_user)
           return render_error({ message: 'Failed to connect discord' }) if user.discord_id.nil?
-          return render_success(user.as_json.merge({ "type": 'users' }))
+
+          render_success(user.as_json.merge({ "type": 'users' }))
         elsif params['data']['attributes']['bot_token'].present?
           token = params['data']['attributes']['bot_token']
           temp_user = User.find_by(bot_token: token)
           return render_error({ message: 'Could not find user of provided token' }) if temp_user.nil?
           return render_error({ message: 'Discord User is already connected to another user' }) if temp_user.web_active?
+
           User.update_discord_id(@current_user, temp_user)
-          return render_success(@current_user.as_json.merge({ "type": 'users' }))
+          render_success(@current_user.as_json.merge({ "type": 'users' }))
         else
           render_error({ message: 'Please send either the token or discord code' })
         end
@@ -105,6 +108,21 @@ module Api
           set_current_user
           return render_success(user.as_json.merge({ "type": 'users' })) if @current_user.present?
         end
+        render_error({ message: 'Error occured while authenticating' })
+      end
+
+      def update_college
+        college_name = params['data']['attributes']['college_name']
+
+        unless college_name.present?
+          params['data']['attributes'].delete 'college_name'
+          return true
+        end
+
+        College.create_college(college_name) unless College.exists?(name: college_name)
+        params['data']['attributes']['college_id'] = College.find_by(name: college_name).id
+
+        params['data']['attributes'].delete 'college_name'
       end
     end
   end
