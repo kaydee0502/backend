@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_11_150521) do
+ActiveRecord::Schema.define(version: 2021_06_05_145138) do
 
   create_table "batches", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
     t.integer "owner_id"
@@ -75,24 +75,6 @@ ActiveRecord::Schema.define(version: 2021_06_11_150521) do
     t.index ["jti"], name: "index_jwt_blacklists_on_jti"
   end
 
-  create_table "scrums", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
-    t.integer "group_id"
-    t.integer "user_id"
-    t.integer "group_member_id"
-    t.boolean "attendance"
-    t.string "data"
-    t.boolean "saw_last_lecture"
-    t.string "till_which_tha_you_are_done"
-    t.string "what_cover_today"
-    t.string "reason_for_backlog"
-    t.integer "rate_yesterday_class"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["group_id"], name: "index_scrums_on_group_id"
-    t.index ["group_member_id"], name: "index_scrums_on_group_member_id"
-    t.index ["user_id"], name: "index_scrums_on_user_id"
-  end
-
   create_table "submissions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
     t.integer "user_id"
     t.integer "content_id"
@@ -132,7 +114,10 @@ ActiveRecord::Schema.define(version: 2021_06_11_150521) do
     t.date "dob"
     t.integer "college_id"
     t.string "registration_num"
+    t.integer "grad_start"
+    t.integer "grad_end"
     t.integer "user_type", default: 0
+    t.string "bot_token"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
