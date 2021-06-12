@@ -5,6 +5,7 @@ class User < ApplicationRecord
          :jwt_authenticatable,
          jwt_revocation_strategy: JwtBlacklist
   after_create :create_bot_token
+  enum user_type: [:user, :admin] 
 
   def self.fetch_discord_id(code)
     token = fetch_discord_access_token(code)
@@ -89,6 +90,14 @@ class User < ApplicationRecord
 
     response = HTTParty.post(url, body: {}, headers: headers)
     response.code == 200 ? JSON(response.read_body) : nil
+  end
+
+  def fetch_group_ids
+    if self.user_type == "user"
+      Group.where(batch_leader_id: self.id).pluck(:id) + GroupMember.where(user_id: self.id).pluck(:group_id)    
+    elsif self.user_type == "admin"
+      Group.all.ids
+    end
   end
 
   def self.update_discord_id(user, temp_user)

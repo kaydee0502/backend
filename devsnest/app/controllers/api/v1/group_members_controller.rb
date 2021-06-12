@@ -15,7 +15,7 @@ module Api
         group = Group.find_by(id: params[:group_id])
         return render_not_found unless group.present?
 
-        return render_forbidden unless group.group_members.where(user_id: @current_user.id).present?
+        return render_forbidden unless group.check_auth(@current_user)
       end
     end
   end
