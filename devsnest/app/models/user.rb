@@ -5,7 +5,7 @@ class User < ApplicationRecord
          :jwt_authenticatable,
          jwt_revocation_strategy: JwtBlacklist
   after_create :create_bot_token
-  enum user_type: [:user, :admin] 
+  enum user_type: %i[user admin]
 
   def self.fetch_discord_id(code)
     token = fetch_discord_access_token(code)
@@ -93,9 +93,9 @@ class User < ApplicationRecord
   end
 
   def fetch_group_ids
-    if self.user_type == "user"
-      Group.where(batch_leader_id: self.id).pluck(:id) + GroupMember.where(user_id: self.id).pluck(:group_id)    
-    elsif self.user_type == "admin"
+    if self.user_type == 'user'
+      Group.where(batch_leader_id: self.id).pluck(:id) + GroupMember.where(user_id: self.id).pluck(:group_id)
+    elsif self.user_type == 'admin'
       Group.all.ids
     end
   end
@@ -113,26 +113,26 @@ class User < ApplicationRecord
 
   def self.connect_discord_with_code(code)
     discord_id = User.fetch_discord_id(code)
-    return nil,'Incorrect code from discord' if discord_id.nil?
+    return nil, 'Incorrect code from discord' if discord_id.nil?
 
     tmp_user = User.find_by(discord_id: discord_id)
-    return nil,'Discord user is already connected to another user' if tmp_user.web_active?
+    return nil, 'Discord user is already connected to another user' if tmp_user.web_active?
 
     user = User.merge_discord_user(discord_id, @current_user)
-    return nil,'Failed to connect Discord' if user.discord_id.nil?
+    return nil, 'Failed to connect Discord' if user.discord_id.nil?
 
-    user.update(discord_active:true)
-    return user,'Success'
+    user.update(discord_active: true)
+    return user, 'Success'
   end
 
-  def self.connect_discord_with_bot_token(bot_token,user)
+  def self.connect_discord_with_bot_token(bot_token, user)
     temp_user = User.find_by(bot_token: bot_token)
-    return nil,'Could Not find User of Provided token' if temp_user.nil?
+    return nil, 'Could Not find User of Provided token' if temp_user.nil?
 
-    return nil,'Discord user is already connected to another user' if temp_user.web_active?
+    return nil, 'Discord user is already connected to another user' if temp_user.web_active?
 
     User.update_discord_id(user, temp_user)
-    user.update(discord_active:true)
-    return user,'Success'
+    user.update(discord_active: true)
+    return user, 'Success'
   end
 end
