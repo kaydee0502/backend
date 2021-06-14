@@ -72,15 +72,26 @@ module Api
       end
 
       def connect_discord
-        message = "Please Connect with Discord or enter bot-token"
-        if params['code'].present?
-          user, message = User.connect_discord_with_code(params['code'])
-        elsif params['data']['attributes']['bot_token'].present?
-          user, message = User.connect_discord_with_bot_token(params['data']['attributes']['bot_token'], @current_user)
+        unless params['code'].present? || params['data']['attributes']['bot_token'].present?
+          return render_error({ message: "Please Connect with Discord or enter bot-token" })
         end
 
-        return render_error({ message: message }) if user.nil?
-        return render_success(user.as_json.merge({ "type": 'users' }))
+        if params['code'].present?
+          discord_id = User.fetch_discord_id(params['code'])
+          return render_error({ message: 'Incorrect code from discord' }) if discord_id.nil?
+
+          temp_user = User.find_by(discord_id: discord_id)
+        elsif params['data']['attributes']['bot_token'].present?
+          temp_user = User.find_by(bot_token: params['data']['attributes']['bot_token'])
+          return render_error({ message: 'Could Not find User of Provided token' }) if temp_user.nil?
+
+        end
+
+        message = 'Discord user is already connected to another user'
+        return render_error({ message: message }) if temp_user.web_active?
+
+        @current_user.merge_discord_user(temp_user.discord_id, temp_user)
+        render_success(@current_user.as_json.merge({ "type": 'users' }))
       end
 
       def login

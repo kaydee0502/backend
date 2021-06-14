@@ -55,15 +55,12 @@ class User < ApplicationRecord
     )
   end
 
-  def self.merge_discord_user(discord_id, user)
-    temp_user = User.where(discord_id: discord_id).first
-    user.update(discord_id: discord_id)
-    user.save
+  def merge_discord_user(discord_id, temp_user)
+    self.update(discord_id: discord_id, discord_active: true)
     if temp_user.present?
-      Submission.merge_submission(temp_user, user)
+      Submission.merge_submission(temp_user, self)
       temp_user.destroy
     end
-    user
   end
 
   def self.fetch_discord_access_token(code)
@@ -100,39 +97,7 @@ class User < ApplicationRecord
     end
   end
 
-  def self.update_discord_id(user, temp_user)
-    user.discord_id = temp_user.discord_id
-    Submission.merge_submission(temp_user, user)
-    user.save
-    temp_user.destroy
-  end
-
   def create_bot_token
     update(bot_token: Digest::SHA1.hexdigest([Time.now, rand].join))
-  end
-
-  def self.connect_discord_with_code(code)
-    discord_id = User.fetch_discord_id(code)
-    return nil, 'Incorrect code from discord' if discord_id.nil?
-
-    tmp_user = User.find_by(discord_id: discord_id)
-    return nil, 'Discord user is already connected to another user' if tmp_user.web_active?
-
-    user = User.merge_discord_user(discord_id, @current_user)
-    return nil, 'Failed to connect Discord' if user.discord_id.nil?
-
-    user.update(discord_active: true)
-    return user, 'Success'
-  end
-
-  def self.connect_discord_with_bot_token(bot_token, user)
-    temp_user = User.find_by(bot_token: bot_token)
-    return nil, 'Could Not find User of Provided token' if temp_user.nil?
-
-    return nil, 'Discord user is already connected to another user' if temp_user.web_active?
-
-    User.update_discord_id(user, temp_user)
-    user.update(discord_active: true)
-    return user, 'Success'
   end
 end
