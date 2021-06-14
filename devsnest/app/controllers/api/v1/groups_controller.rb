@@ -5,6 +5,7 @@ module Api
     class GroupsController < ApplicationController
       include JSONAPI::ActsAsResourceController
       before_action :simple_auth
+      before_action :bot_auth, only: %i[delete_group]
       before_action :deslug, only: %i[show]
       before_action :check_authorization, only: %i[show]
 
@@ -17,7 +18,6 @@ module Api
         return render_not_found unless group.present?
 
         return render_forbidden unless group.check_auth(@current_user)
-
       end
 
       def deslug
@@ -26,6 +26,14 @@ module Api
         return render_not_found unless group.present?
 
         params[:id] = group.id
+      end
+
+      def delete_group
+        group_name = params['data']['attributes']['group_name']
+        group = Group.find_by(name: group_name)
+        return render_error('Group not found') if group.nil?
+
+        group.destroy
       end
     end
   end

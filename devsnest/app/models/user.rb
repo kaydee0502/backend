@@ -5,7 +5,7 @@ class User < ApplicationRecord
          :jwt_authenticatable,
          jwt_revocation_strategy: JwtBlacklist
   after_create :create_bot_token
-  enum user_type: [:user, :admin] 
+  enum user_type: %i[user admin]
 
   def self.fetch_discord_id(code)
     token = fetch_discord_access_token(code)
@@ -60,6 +60,8 @@ class User < ApplicationRecord
     user.update(discord_id: discord_id)
     user.save
     if temp_user.present?
+      group_member = GroupMember.find_by(user_id: temp_user.id)
+      group_member.update(user_id: user.id) if group_member.present?
       Submission.merge_submission(temp_user, user)
       temp_user.destroy
     end
@@ -93,9 +95,9 @@ class User < ApplicationRecord
   end
 
   def fetch_group_ids
-    if self.user_type == "user"
-      Group.where(batch_leader_id: self.id).pluck(:id) + GroupMember.where(user_id: self.id).pluck(:group_id)    
-    elsif self.user_type == "admin"
+    if user_type == 'user'
+      Group.where(batch_leader_id: id).pluck(:id) + GroupMember.where(user_id: id).pluck(:group_id)
+    elsif user_type == 'admin'
       Group.all.ids
     end
   end
