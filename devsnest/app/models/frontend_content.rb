@@ -1,0 +1,2 @@
+class FrontendContent < ApplicationRecord
+end

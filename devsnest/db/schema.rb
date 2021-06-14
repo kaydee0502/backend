@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_05_145138) do
+ActiveRecord::Schema.define(version: 2021_06_14_094931) do
 
   create_table "batches", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
     t.integer "owner_id"
@@ -43,6 +43,18 @@ ActiveRecord::Schema.define(version: 2021_06_05_145138) do
     t.index ["unique_id"], name: "index_contents_on_unique_id"
   end
 
+  create_table "frontend_contents", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.string "name"
+    t.text "summary"
+    t.string "github_link"
+    t.string "web_view_link"
+    t.string "youtube_link"
+    t.date "project_start"
+    t.date "project_end"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "group_members", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
     t.boolean "scrum_master"
     t.boolean "owner"
@@ -54,6 +66,7 @@ ActiveRecord::Schema.define(version: 2021_06_05_145138) do
     t.integer "student_mentor_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "co_owner"
   end
 
   create_table "groups", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
@@ -66,6 +79,8 @@ ActiveRecord::Schema.define(version: 2021_06_05_145138) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "co_owner_id"
     t.integer "batch_leader_id"
+    t.string "owner_name"
+    t.string "co_owner_name"
     t.string "slug"
   end
 
