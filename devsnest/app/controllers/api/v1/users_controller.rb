@@ -8,6 +8,7 @@ module Api
       before_action :bot_auth, only: %i[left_discord create index get_token]
       before_action :user_auth, only: %i[logout me update connect_discord]
       before_action :update_college, only: %i[update]
+      before_action :update_username, only: %i[update]
 
       def context
         { user: @current_user }
@@ -123,6 +124,22 @@ module Api
         params['data']['attributes']['college_id'] = College.find_by(name: college_name).id
 
         params['data']['attributes'].delete 'college_name'
+      end
+
+      def update_username
+        id = params['data']['id']
+        unless User.find_by(id:id).name == params['data']['attributes']['name']
+          user = User.find_by(id: id)
+          if user.update_count >= 2 || params['data']['attributes']['name'].index( /[^[:alnum:]]/ ) != nil
+            params['data']['attributes']['name'] = user.name
+          else
+            user.update_count = user.update_count + 1
+          end
+          user.save
+        end
+        
+
+
       end
     end
   end
