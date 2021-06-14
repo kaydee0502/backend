@@ -108,6 +108,7 @@ ActiveRecord::Schema.define(version: 2021_06_05_145138) do
     t.string "grad_status"
     t.string "grad_specialization"
     t.integer "grad_year"
+    t.string "google_id", default: "", null: false
     t.string "github_url"
     t.string "linkedin_url"
     t.string "resume_url"
@@ -116,8 +117,8 @@ ActiveRecord::Schema.define(version: 2021_06_05_145138) do
     t.string "registration_num"
     t.integer "grad_start"
     t.integer "grad_end"
-    t.integer "user_type", default: 0
     t.string "bot_token"
+    t.integer "user_type", default: 0
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

@@ -82,7 +82,7 @@ module Api
 
           user = User.merge_discord_user(discord_id, @current_user)
           return render_error({ message: 'Failed to connect discord' }) if user.discord_id.nil?
-
+          user.update(discord_active:true)
           render_success(user.as_json.merge({ "type": 'users' }))
         elsif params['data']['attributes']['bot_token'].present?
           token = params['data']['attributes']['bot_token']
@@ -91,6 +91,7 @@ module Api
           return render_error({ message: 'Discord User is already connected to another user' }) if temp_user.web_active?
 
           User.update_discord_id(@current_user, temp_user)
+          @current_user.update(discord_active:true)
           render_success(@current_user.as_json.merge({ "type": 'users' }))
         else
           render_error({ message: 'Please send either the token or discord code' })
