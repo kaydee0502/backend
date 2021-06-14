@@ -74,27 +74,22 @@ module Api
       def connect_discord
         if params['code'].present?
           code = params['code']
-          discord_id = User.fetch_discord_id(code)
-          return render_error({ message: 'Incorrect code from discord' }) if discord_id.nil?
-
-          tmp_user = User.find_by(discord_id: discord_id)
-          return render_error({ message: 'Discord User is already connected to another user' }) if tmp_user.present? && tmp_user.web_active?
-
-          user = User.merge_discord_user(discord_id, @current_user)
-          return render_error({ message: 'Failed to connect discord' }) if user.discord_id.nil?
-          user.update(discord_active:true)
-          render_success(user.as_json.merge({ "type": 'users' }))
+          user,message = User.connect_discord_with_code(code)
+          
+          unless user.nil?
+            render_success(user.as_json.merge({ "type": 'users' }))
+          else
+            render_error({ message: message }) 
+          end
         elsif params['data']['attributes']['bot_token'].present?
-          token = params['data']['attributes']['bot_token']
-          temp_user = User.find_by(bot_token: token)
-          return render_error({ message: 'Could not find user of provided token' }) if temp_user.nil?
-          return render_error({ message: 'Discord User is already connected to another user' }) if temp_user.web_active?
+          bot_token = params['data']['attributes']['bot_token']
+          user,message = User.connect_discord_with_bot_token(bot_token,@current_user)
 
-          User.update_discord_id(@current_user, temp_user)
-          @current_user.update(discord_active:true)
-          render_success(@current_user.as_json.merge({ "type": 'users' }))
-        else
-          render_error({ message: 'Please send either the token or discord code' })
+          unless user.nil?
+            render_success(user.as_json.merge({ "type": 'users' }))
+          else
+            render_error({ message: message }) 
+          end
         end
       end
 
