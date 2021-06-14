@@ -75,19 +75,12 @@ module Api
         if params['code'].present?
           user, message = User.connect_discord_with_code(params['code'])
           
-          unless user.nil?
-            render_success(user.as_json.merge({ "type": 'users' }))
-          else
-            render_error({ message: message })
-          end
+          return render_error({ message: message }) if user.nil?
+          return render_success(user.as_json.merge({ "type": 'users' }))
         elsif params['data']['attributes']['bot_token'].present?
           user, message = User.connect_discord_with_bot_token(params['data']['attributes']['bot_token'], @current_user)
-
-          unless user.nil?
-            render_success(user.as_json.merge({ "type": 'users' }))
-          else
-            render_error({ message: message }) 
-          end
+          return render_error({ message: message }) if user.nil?
+          return render_success(user.as_json.merge({ "type": 'users' }))
         end
       end
 
