@@ -54,10 +54,12 @@ module Api
             # is vice team leader of his group
             Group.update(co_owner_id: user.id) if user.id != new_group.co_owner_id
           end
-        else
+        elsif current_group_member.present?
           # delete the user from group
           current_group_member.destroy
         end
+
+        render_success({})
       end
     end
   end
