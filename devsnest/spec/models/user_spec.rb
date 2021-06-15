@@ -20,6 +20,7 @@ RSpec.describe User, type: :model do
 
   let(:valid_user) do
     { 'id' => '377019241473245195',
+      'name' => 'KayDee',
       'username' => 'KayDee',
       'avatar' => '3bb80e2861f477c9e128635aad04914b',
       'discriminator' => '3187',
@@ -33,7 +34,7 @@ RSpec.describe User, type: :model do
 
   context 'create user test' do
     before do
-      @new_user = User.create_user(valid_user)
+      @new_user = User.create_google_user(valid_user, 9000)
     end
 
     it 'creates a discord user' do
@@ -41,7 +42,7 @@ RSpec.describe User, type: :model do
     end
 
     it 'checks if user is in database' do
-      expect(User.find_by(discord_id: valid_user['id'])).to be_present
+      expect(User.find_by(google_id: 9000)).to be_present
     end
   end
 end
