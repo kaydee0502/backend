@@ -5,7 +5,7 @@ module Api
     class GroupsController < ApplicationController
       include JSONAPI::ActsAsResourceController
       before_action :simple_auth
-      before_action :bot_auth, only: %i[delete_group]
+      before_action :bot_auth, only: %i[delete_group update_group_name]
       before_action :deslug, only: %i[show]
       before_action :check_authorization, only: %i[show]
 
@@ -34,6 +34,17 @@ module Api
         return render_error('Group not found') if group.nil?
 
         group.destroy
+      end
+
+      def update_group_name
+        old_group_name = params['data']['attributes']['old_group_name']
+        new_group_name = params['data']['attributes']['new_group_name']
+        group = Group.find_by(name: old_group_name)
+        return render_error('Group not found') if group.nil?
+
+        group.update(name: new_group_name)
+
+        render_success(group.as_json.merge({ 'type': 'group' }))
       end
     end
   end
