@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       jsonapi_resources :groups, only: %i[show index] do
         collection do
           delete :delete_group
+          put :update_group_name
         end
       end
       jsonapi_resources :group_members, only: %i[index show] do
