@@ -29,7 +29,6 @@ module Api
         return render_error('User not found') if user.nil?
 
         current_group_member = GroupMember.find_by(user_id: user.id)
-        current_group = Group.find_by(id: current_group_member.group_id) if current_group_member.present?
 
         if updated_group_name.present?
           # create group if not already exists
@@ -44,13 +43,13 @@ module Api
             current_group_member.update(group_id: new_group.id)
           else
             # user was not part of any group need to create member
-            current_group_member = GroupMember.create(user_id: user.id, group_id: new_group.id)
+            GroupMember.create(user_id: user.id, group_id: new_group.id)
           end
 
           # update TL status
-          current_group.update(owner_id: user.id) if is_team_leader
+          new_group.update(owner_id: user.id) if is_team_leader
           # update VTL status
-          current_group.update(co_owner_id: user.id) if is_vice_team_leader
+          new_group.update(co_owner_id: user.id) if is_vice_team_leader
         elsif current_group_member.present?
           # User has been removed from a team
           current_group_member.destroy
