@@ -33,7 +33,7 @@ module Api
 
         if updated_group_name.present?
           # create group if not already exists
-          new_group = new_group.nil? ? Group.find_by(name: updated_group_name) : Group.create(name: updated_group_name)
+          new_group = Group.find_or_create_by(name: updated_group_name)
 
           # remove TL and VTL from old team
           Group.where(owner_id: user.id).update_all(owner_id: nil)
