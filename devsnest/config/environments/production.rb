@@ -105,5 +105,7 @@ Rails.application.configure do
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
   config.hosts << "devsnest.in"
   config.hosts << "api.devsnest.in"
-  
+  config.hosts << "harry.api.devsnest.in"
+  config.hosts << "ron.api.devsnest.in"
+  config.hosts << "hermione.api.devsnest.in"
 end
