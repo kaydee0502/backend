@@ -6,7 +6,7 @@ module Api
     class BatchLeaderSheetResource < JSONAPI::Resource
       attributes :user_id, :group_id, :Coordination, :scrum_filled, :owner_active, :co_owner_active,
                  :rating, :creation_week, :active_members, :par_active_members, :inactive_members,
-                 :doubt_session_taker
+                 :doubt_session_taker, :video_scrum, :remarks, :tl_tha, :vtl_tha
 
       def self.creatable_fields(context)
         super - %i[creation_week]
