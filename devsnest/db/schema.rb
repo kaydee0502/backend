@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_05_181526) do
+ActiveRecord::Schema.define(version: 2021_07_27_064241) do
 
   create_table "audits", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
     t.integer "auditable_id"
@@ -47,6 +47,10 @@ ActiveRecord::Schema.define(version: 2021_07_05_181526) do
     t.text "par_active_members"
     t.text "inactive_members"
     t.text "doubt_session_taker"
+    t.boolean "video_scrum"
+    t.string "remarks"
+    t.string "tl_tha"
+    t.string "vtl_tha"
     t.index ["group_id", "creation_week"], name: "index_batch_leader_sheets_on_group_id_and_creation_week", unique: true
   end
 
@@ -115,6 +119,18 @@ ActiveRecord::Schema.define(version: 2021_07_05_181526) do
     t.integer "co_owner_id"
     t.integer "batch_leader_id"
     t.string "slug"
+  end
+
+  create_table "internal_feedbacks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.bigint "user_id"
+    t.boolean "is_resolved", default: false
+    t.string "issue_type", default: ""
+    t.text "issue_described"
+    t.text "feedback"
+    t.integer "issue_scale", default: 0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_internal_feedbacks_on_user_id"
   end
 
   create_table "jwt_blacklists", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
@@ -201,10 +217,10 @@ ActiveRecord::Schema.define(version: 2021_07_05_181526) do
     t.date "creation_week"
     t.integer "batch_leader_rating"
     t.integer "group_activity_rating"
-    t.text "extra_activity"
-    t.text "comments"
+    t.string "extra_activity"
+    t.string "comments"
     t.integer "moral_status"
-    t.text "obstacles"
+    t.string "obstacles"
     t.json "todo_list"
     t.index ["group_id", "creation_week"], name: "index_weekly_todos_on_group_id_and_creation_week", unique: true
   end
