@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_27_092546) do
+ActiveRecord::Schema.define(version: 2021_07_05_181526) do
 
   create_table "audits", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
     t.integer "auditable_id"
@@ -47,10 +47,6 @@ ActiveRecord::Schema.define(version: 2021_07_27_092546) do
     t.text "par_active_members"
     t.text "inactive_members"
     t.text "doubt_session_taker"
-    t.boolean "video_scrum"
-    t.text "remarks"
-    t.string "tl_tha"
-    t.string "vtl_tha"
     t.index ["group_id", "creation_week"], name: "index_batch_leader_sheets_on_group_id_and_creation_week", unique: true
   end
 
@@ -139,7 +135,6 @@ ActiveRecord::Schema.define(version: 2021_07_27_092546) do
     t.date "creation_date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "last_tha_link"
     t.index ["user_id", "creation_date"], name: "index_scrums_on_user_id_and_creation_date", unique: true
   end
 
