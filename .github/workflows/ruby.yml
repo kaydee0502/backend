@@ -51,7 +51,7 @@ jobs:
 
       - uses: actions/download-artifact@v1
         with:
-          name: coverage-2.7
+          name: index
           path: devsnest/coverage/index.html
 
       - name: Upload results to Code Climate
