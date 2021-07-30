@@ -19,24 +19,24 @@ steps:
       mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
 
   - name: Checkout Repository
-        uses: actions/checkout@v2
+    uses: actions/checkout@v2
 
   - name: Set up Ruby
-        uses: ruby/setup-ruby@ec106b438a1ff6ff109590de34ddc62c540232e0
-        with:
-          ruby-version: 2.7.2
-          bundler-cache: true
+    uses: ruby/setup-ruby@ec106b438a1ff6ff109590de34ddc62c540232e0
+    with:
+      ruby-version: 2.7.2
+      bundler-cache: true
 
   - name: Change Directory
-        run: cd devsnest
+    run: cd devsnest
 
   - name: Install Bundler
-        run: bundle install --jobs 4 --retry 3
+    run: bundle install --jobs 4 --retry 3
 
   - name: Run Migrations
-        run: |
+    run: |
         bundle exec rake db:create
         bundle exec rake db:migtrate
 
   - name: Run Tests
-        run: bundle exec rspec spec
+    run: bundle exec rspec spec
