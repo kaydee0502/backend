@@ -49,10 +49,10 @@ jobs:
             bundle exec rake db:migrate
             bundle exec rspec spec
 
-      - uses: actions/download-artifact@v1
+      - uses: actions/download-artifact@v2
         with:
           name: index
-          path: devsnest/coverage/index.html
+          path: devsnest/coverage/
 
       - name: Upload results to Code Climate
         working-directory: ./devsnest
