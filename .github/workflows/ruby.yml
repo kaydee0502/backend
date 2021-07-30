@@ -40,4 +40,3 @@ steps:
 
   - name: Run Tests
         run: bundle exec rspec spec
-
