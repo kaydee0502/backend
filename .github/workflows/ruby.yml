@@ -8,15 +8,15 @@ jobs:
 
     env:
       DB_DATABASE: devsnest_test
-      DB_USER: root
-      DB_PASSWORD: root
+      MYSQL_USERNAME: root
+      MYSQL_PASSWORD: root
       CC_TEST_REPORTER_ID: 8f0038687a9ad7675365b6a1ecde37608d55e4fa148d2da81a0653dc1dc6937d
 
     steps:
       - name: Set up MySQL
         run: |
           sudo /etc/init.d/mysql start
-          mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
+          mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u ${{ env.MYSQL_USERNAME }} -p ${{ env.MYSQL_PASSWORD }}
 
       - name: Checkout Repository
         uses: actions/checkout@v2
