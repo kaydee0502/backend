@@ -35,16 +35,14 @@ jobs:
           ruby-version: 2.7.2
           bundler-cache: true
 
-      - name: Install Bundler
-        working-directory: ./devsnest
-        run: bundle install --jobs 4 --retry 3
-
-      - name: Run Migrations
-        working-directory: ./devsnest
-        run: |
-            bundle exec rake db:create
-            bundle exec rake db:migtrate
 
       - name: Run Tests
+        env:
+          RAILS_ENV: test
+          DATABASE_PORT: 3306
         working-directory: ./devsnest
-        run: bundle exec rspec spec
+        run: |
+            bundle install --jobs 4 --retry 3
+            bundle exec rake db:create
+            bundle exec rake db:migtrate
+            bundle exec rspec spec
