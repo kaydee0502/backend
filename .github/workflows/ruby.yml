@@ -51,11 +51,11 @@ jobs:
 
       - uses: actions/download-artifact@v2
         with:
-          name: index
-          path: devsnest/coverage/
+          name: code-coverage-report
+          path: ./devsnest/coverage/index.html
 
-      - name: Upload results to Code Climate
-        working-directory: ./devsnest
-        run: |
-          ./cc-test-reporter format-coverage -t simplecov -o coverage/codeclimate.json
-          ./cc-test-reporter upload-coverage
+      # - name: Upload results to Code Climate
+      #   working-directory: ./devsnest
+      #   run: |
+      #     ./cc-test-reporter format-coverage -t simplecov -o coverage/codeclimate.json
+      #     ./cc-test-reporter upload-coverage
