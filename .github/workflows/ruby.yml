@@ -6,37 +6,37 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-env:
-  DB_DATABASE: devsnest_test
-  DB_USER: root
-  DB_PASSWORD: root
-  CC_TEST_REPORTER_ID: 8f0038687a9ad7675365b6a1ecde37608d55e4fa148d2da81a0653dc1dc6937d
+    env:
+      DB_DATABASE: devsnest_test
+      DB_USER: root
+      DB_PASSWORD: root
+      CC_TEST_REPORTER_ID: 8f0038687a9ad7675365b6a1ecde37608d55e4fa148d2da81a0653dc1dc6937d
 
-steps:
-  - name: Set up MySQL
-    run: |
-      sudo /etc/init.d/mysql start
-      mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
+    steps:
+      - name: Set up MySQL
+        run: |
+          sudo /etc/init.d/mysql start
+          mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
 
-  - name: Checkout Repository
-    uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-  - name: Set up Ruby
-    uses: ruby/setup-ruby@ec106b438a1ff6ff109590de34ddc62c540232e0
-    with:
-      ruby-version: 2.7.2
-      bundler-cache: true
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@ec106b438a1ff6ff109590de34ddc62c540232e0
+        with:
+          ruby-version: 2.7.2
+          bundler-cache: true
 
-  - name: Change Directory
-    run: cd devsnest
+      - name: Change Directory
+        run: cd devsnest
 
-  - name: Install Bundler
-    run: bundle install --jobs 4 --retry 3
+      - name: Install Bundler
+        run: bundle install --jobs 4 --retry 3
 
-  - name: Run Migrations
-    run: |
-        bundle exec rake db:create
-        bundle exec rake db:migtrate
+      - name: Run Migrations
+        run: |
+            bundle exec rake db:create
+            bundle exec rake db:migtrate
 
-  - name: Run Tests
-    run: bundle exec rspec spec
+      - name: Run Tests
+        run: bundle exec rspec spec
