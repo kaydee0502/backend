@@ -71,7 +71,7 @@ class ApplicationController < ActionController::API
   end
 
   def initialize_redis
-    redis_options = {:host => 'localhost', :port => 6379, :db => 1}
+    redis_options = {:host => ENV["REDIS_HOST"], :port => 6379, :db => 1}
     @leaderboard = Leaderboard.new(ENV["REDIS_DB"], Leaderboard::DEFAULT_OPTIONS, redis_options)
   end
 end
