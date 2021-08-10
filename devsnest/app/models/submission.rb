@@ -18,7 +18,7 @@ class Submission < ApplicationRecord
     res
   end
 
-  def self.create_submission(user_id, content_id, choice)
+  def self.create_submission(user_id, content_id, choice, leaderboard)
     submission = Submission.find_by(user_id: user_id, content_id: content_id)
     user = User.find(user_id)
 
@@ -35,6 +35,7 @@ class Submission < ApplicationRecord
     submission.status = choice
     submission.save
     user.save
+    leaderboard.rank_member(user.username, user.score)
     submission
   end
 
