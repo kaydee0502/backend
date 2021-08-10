@@ -15,7 +15,7 @@ jobs:
       REDIS_DB: devsnest_lb_test
 
 
-    service:
+    services:
       redis:
         image: redis
         ports:
