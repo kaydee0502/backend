@@ -125,4 +125,10 @@ class User < ApplicationRecord
       end
     end
   end
+
+  def self.initialize_leaderboard(leaderboard)
+    find_each do |a|
+      leaderboard.rank_member(a.username, a.score)
+    end
+  end
 end

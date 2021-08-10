@@ -48,16 +48,14 @@ module Api
       end
 
       def leaderboard
+        @leaderboard.page_size = params[:size].to_i || 10
         page = params[:page].to_i
-        size = params[:size] || 10
-        size = size.to_i
-        offset = [(page - 1) * size, 0].max
-        data = User.order(score: :desc, id: :asc)
-        scoreboard = data.limit(size).offset(offset)
-        pages_count = (User.count % size).zero? ? User.count / size : User.count / size + 1
+        scoreboard = @leaderboard.leaders(page)
+        byebug
+        pages_count = @leaderboard.total_pages
         if @current_user
-          rank = data.pluck(:id).index(@current_user.id)
-          return render json: { user: @current_user, rank: rank + 1, scoreboard: scoreboard, count: pages_count }
+          rank = @leaderboard.rank_for(@current_user.id)
+          return render json: { user: @current_user, rank: rank, scoreboard: scoreboard, count: pages_count }
         end
         render json: { scoreboard: scoreboard, count: pages_count }
       end
